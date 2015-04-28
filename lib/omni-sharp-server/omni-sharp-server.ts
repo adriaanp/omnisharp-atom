@@ -6,6 +6,7 @@ import _ = require('lodash')
 import Promise = require("bluebird");
 import readline = require("readline");
 import finder = require('./project-finder');
+import monitor = require('./file-monitor');
 
 class OmniSharpServer {
     public vm: OmniSharp.vm = {
@@ -75,6 +76,8 @@ class OmniSharpServerInstance {
         var path = finder.findProject(atom && atom.project && atom.project.getPaths()[0]);
         var serverArguments = ["--stdio", "-s", path, "--hostPID", process.pid];
         this.child = spawn(executablePath, serverArguments);
+        var m = new monitor();
+        m.monitor(path);
         atom.emitter.emit("omni-sharp-server:start", this.child.pid);
         atom.emitter.emit("omni-sharp-server:state-change", "loading");
         this.child.stdout.on('data', this.serverStart);
