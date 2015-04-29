@@ -119,6 +119,10 @@ class Omni {
         Omni.reql("filesChanged", "package-restore");
     }
 
+    public static filesChanged(file) {
+      Omni.reql("filesChanged", file);
+    }
+
     public static autocomplete(wordToComplete: string) {
         var data: OmniSharp.Models.AutoCompleteRequest = {
             WordToComplete: wordToComplete,
