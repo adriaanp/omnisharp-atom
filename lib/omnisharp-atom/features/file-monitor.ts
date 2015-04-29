@@ -1,8 +1,8 @@
 import path = require('path');
-import OmniSharpServer = require('./omni-sharp-server');
-import Omni = require('./omni');
-import OmniSharpAtom = require('../omnisharp-atom/omnisharp-atom');
-import finder = require('./project-finder');
+import OmniSharpServer = require('../../omni-sharp-server/omni-sharp-server');
+import Omni = require('../../omni-sharp-server/omni');
+import OmniSharpAtom = require('../omnisharp-atom');
+
 var glob = require('glob');
 import _ = require('lodash');
 var pw = require('pathwatcher');
@@ -12,9 +12,14 @@ class FileMonitor {
 
   public activate() {
       atom.emitter.on("omni-sharp-server:start", data => {
-          monitor
+          this.monitor(data.path);
       });
   }
+
+  public deactivate() {
+    //todo unsubscribe to file watching
+  }
+
 
   public monitor(location: string) {
     //this.server = OmniSharpServer;
@@ -35,10 +40,10 @@ class FileMonitor {
             if (exists) {
               file.onDidChange(() => {
                 console.log("file changed");
-                atom.emmitter.emit("omnisharp-atom-filewatcher:filechanged");
-                /*if (!this.server.vm.isOff) {
-                    this.omni.packageRestore();
-                }*/
+                if (!OmniSharpServer.vm.isOff) {
+                  //what does packageRestore do on the server?
+                    Omni.packageRestore();
+                }
               });
             }
           });
