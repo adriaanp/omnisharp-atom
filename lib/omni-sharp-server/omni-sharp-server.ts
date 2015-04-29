@@ -6,7 +6,7 @@ import _ = require('lodash')
 import Promise = require("bluebird");
 import readline = require("readline");
 import finder = require('./project-finder');
-to
+
 class OmniSharpServer {
     public vm: OmniSharp.vm = {
         isNotLoading: true,
