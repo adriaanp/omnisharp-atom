@@ -10,6 +10,12 @@ var pw = require('pathwatcher');
 
 class FileMonitor {
 
+  public activate() {
+      atom.emitter.on("omni-sharp-server:start", data => {
+          monitor
+      });
+  }
+
   public monitor(location: string) {
     //this.server = OmniSharpServer;
     //this.omni = Omni;
@@ -29,6 +35,7 @@ class FileMonitor {
             if (exists) {
               file.onDidChange(() => {
                 console.log("file changed");
+                atom.emmitter.emit("omnisharp-atom-filewatcher:filechanged");
                 /*if (!this.server.vm.isOff) {
                     this.omni.packageRestore();
                 }*/
